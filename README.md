@@ -261,28 +261,51 @@ svix-sample/
 ## 🎯 Key Features Implemented
 
 ✅ Authentication with access tokens
+
 ✅ Full CRUD for Applications
+
 ✅ Full CRUD for Event Types
+
 ✅ Full CRUD for Endpoints
+
 ✅ **Unified endpoint configuration** (edit in config page)
+
 ✅ Custom headers management per endpoint
+
 ✅ Webhook secret rotation
+
 ✅ Endpoint performance statistics
+
 ✅ **Advanced dashboard with 6 charts**
+
 ✅ Message sending and testing
+
 ✅ Delivery attempt monitoring
+
 ✅ Status filtering and search
+
 ✅ Retry mechanism for failed deliveries
+
 ✅ Pagination for all list views
+
 ✅ **Dark mode** support
+
 ✅ **Brand customization** (API-based storage)
+
 ✅ **Global app selector**
+
 ✅ **Breadcrumb navigation**
+
 ✅ **URL parameter filtering**
+
 ✅ Responsive design
+
 ✅ Error handling
+
 ✅ Loading states
+
 ✅ Toast notifications
+
 ✅ Optimized caching with React Query
 
 ## 📝 API Coverage
