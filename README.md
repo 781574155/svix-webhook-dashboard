@@ -154,6 +154,26 @@ The application uses Svix's standard OpenAPI specification for all API operation
 
 ## 🔧 Configuration
 
+### Runtime API Configuration
+
+Set the API endpoint and access token in `public/config.js`:
+
+```javascript
+window.SVIX_DASHBOARD_CONFIG = {
+  API_BASE_URL: 'http://localhost:8071',
+  ACCESS_TOKEN: 'your-svix-access-token',
+}
+```
+
+The file is copied to `dist/config.js` during build and is loaded before the
+application. It can therefore be replaced or edited in a deployment without
+rebuilding the application. Configured values take precedence over values saved
+in the browser. If the access token is configured, the login page is skipped;
+any unconfigured value can still be entered in the web interface.
+
+> `config.js` is served to the browser. Anyone who can access the dashboard can
+> read its access token, so restrict dashboard access appropriately.
+
 ### Getting Your Svix Access Token
 
 ```

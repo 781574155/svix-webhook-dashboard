@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '../store/authStore'
+import { hasConfiguredAccessToken } from '../utils/runtimeConfig'
 
 const createApiClient = () => {
   const client = axios.create({
@@ -27,8 +28,10 @@ const createApiClient = () => {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
-        useAuthStore.getState().logout()
-        window.location.href = '/login'
+        if (!hasConfiguredAccessToken) {
+          useAuthStore.getState().logout()
+          window.location.href = '/login'
+        }
       }
       return Promise.reject(error)
     }

@@ -3,18 +3,30 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { Shield, Key, Server } from 'lucide-react'
 import toast from 'react-hot-toast'
+import {
+  hasConfiguredAccessToken,
+  hasConfiguredApiBaseUrl,
+  normalizeBaseUrl,
+  runtimeConfig,
+} from '../utils/runtimeConfig'
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const setAuth = useAuthStore((state) => state.setAuth)
-  const [token, setToken] = useState('')
-  const [baseUrl, setBaseUrl] = useState('http://localhost:8071')
+  const [token, setToken] = useState(runtimeConfig.accessToken)
+  const [baseUrl, setBaseUrl] = useState(
+    runtimeConfig.apiBaseUrl || 'http://localhost:8071'
+  )
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e) => {
     e.preventDefault()
 
-    if (!token.trim()) {
+    const effectiveToken = runtimeConfig.accessToken || token.trim()
+    const effectiveBaseUrl =
+      runtimeConfig.apiBaseUrl || normalizeBaseUrl(baseUrl)
+
+    if (!effectiveToken) {
       toast.error('Please enter your access token')
       return
     }
@@ -23,15 +35,15 @@ export default function LoginPage() {
 
     try {
       // Validate token by making a test request
-      const response = await fetch(`${baseUrl}/api/v1/app?limit=1`, {
+      const response = await fetch(`${effectiveBaseUrl}/api/v1/app?limit=1`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${effectiveToken}`,
           Accept: 'application/json',
         },
       })
 
       if (response.ok) {
-        setAuth(token, baseUrl)
+        setAuth(effectiveToken, effectiveBaseUrl)
         toast.success('Successfully logged in!')
         navigate('/applications')
       } else {
@@ -64,7 +76,7 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
-            <div>
+            {!hasConfiguredAccessToken && <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Key className="w-4 h-4" />
                 Access Token
@@ -77,9 +89,9 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
                 required
               />
-            </div>
+            </div>}
 
-            <div>
+            {!hasConfiguredApiBaseUrl && <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Server className="w-4 h-4" />
                 API Base URL
@@ -94,7 +106,13 @@ export default function LoginPage() {
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 Optional: Use custom Svix server endpoint
               </p>
-            </div>
+            </div>}
+
+            {(hasConfiguredAccessToken || hasConfiguredApiBaseUrl) && (
+              <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                Values provided by config.js are loaded automatically.
+              </p>
+            )}
 
             <button
               type="submit"

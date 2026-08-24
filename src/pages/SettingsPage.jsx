@@ -5,6 +5,10 @@ import { Server, Key, Trash2, Shield, Info, Palette } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useConfirm } from '../contexts/ConfirmContext'
+import {
+  hasConfiguredAccessToken,
+  hasConfiguredApiBaseUrl,
+} from '../utils/runtimeConfig'
 
 export default function SettingsPage() {
   const navigate = useNavigate()
@@ -160,17 +164,20 @@ export default function SettingsPage() {
                     onChange={(e) => setNewBaseUrl(e.target.value)}
                     className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
                     placeholder="https://api.svix.com"
+                    disabled={hasConfiguredApiBaseUrl}
                   />
                   <button
                     onClick={handleUpdateBaseUrl}
-                    disabled={newBaseUrl === baseUrl}
+                    disabled={hasConfiguredApiBaseUrl || newBaseUrl === baseUrl}
                     className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-lg transition-colors font-medium"
                   >
                     Update
                   </button>
                 </div>
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Current: {baseUrl}
+                  {hasConfiguredApiBaseUrl
+                    ? 'Managed by config.js'
+                    : `Current: ${baseUrl}`}
                 </p>
               </div>
             </div>
@@ -324,7 +331,9 @@ export default function SettingsPage() {
                   </button>
                 </div>
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  To change your token, please logout and login again
+                  {hasConfiguredAccessToken
+                    ? 'Managed by config.js'
+                    : 'To change your token, please logout and login again'}
                 </p>
               </div>
             </div>
@@ -362,12 +371,15 @@ export default function SettingsPage() {
 
               <button
                 onClick={handleLogout}
+                disabled={hasConfiguredAccessToken}
                 className="w-full flex items-center justify-between px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-left"
               >
                 <div>
                   <p className="font-medium text-red-900 dark:text-red-100">Logout</p>
                   <p className="text-sm text-red-600 dark:text-red-400">
-                    Sign out from this dashboard
+                    {hasConfiguredAccessToken
+                      ? 'Disabled while the token is managed by config.js'
+                      : 'Sign out from this dashboard'}
                   </p>
                 </div>
                 <Shield className="w-5 h-5 text-red-600 dark:text-red-400" />

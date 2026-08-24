@@ -1,41 +1,46 @@
 {
   "name": "svix-webhook-dashboard",
   "author": {
-	"name": "Tùng Huynh",
-	"email": "tunghuynh.tn@gmail.com",
-	"url": "https://tunghuynh.net"
+    "name": "Tùng Huynh",
+    "email": "tunghuynh.tn@gmail.com",
+    "url": "https://tunghuynh.net"
   },
   "repository": {
-	"type": "git",
-	"url": "https://github.com/tunghuynh/svix-webhook-dashboard.git"
+    "type": "git",
+    "url": "https://github.com/tunghuynh/svix-webhook-dashboard.git"
   },
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
+    "@tanstack/react-query": "^5.13.4",
+    "axios": "^1.6.2",
+    "clsx": "^2.0.0",
+    "date-fns": "^3.0.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "axios": "^1.6.2",
-    "@tanstack/react-query": "^5.13.4",
     "react-hook-form": "^7.48.2",
-    "zustand": "^4.4.7",
-    "recharts": "^2.10.3",
-    "date-fns": "^3.0.0",
-    "clsx": "^2.0.0",
     "react-hot-toast": "^2.4.1",
-    "lucide-react": "^0.294.0"
+    "react-router-dom": "^6.20.0",
+    "recharts": "^2.10.3",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.2.0",
-    "tailwindcss": "^3.3.6",
+    "autoprefixer": "^10.4.16",
+    "cross-var": "^1.1.0",
     "postcss": "^8.4.32",
-    "autoprefixer": "^10.4.16"
+    "tailwindcss": "^3.3.6",
+    "vite": "^5.0.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build": "cross-var docker build --platform=linux/amd64,linux/arm64 -t tanqi/$npm_package_name:v$npm_package_version .",
+    "docker:tag": "cross-var docker tag tanqi/$npm_package_name:v$npm_package_version registry.openai36.com/tanqi/$npm_package_name:v$npm_package_version ",
+    "docker:push": "cross-var docker push registry.openai36.com/tanqi/$npm_package_name:v$npm_package_version ",
+    "package": "npm run build && npm run docker:build && npm run docker:tag && npm run docker:push"
   }
 }

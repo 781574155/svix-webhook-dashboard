@@ -49,6 +49,16 @@ function ProtectedRoute({ children }) {
   return children
 }
 
+function LoginRoute() {
+  const { token } = useAuthStore()
+
+  if (token) {
+    return <Navigate to="/applications" replace />
+  }
+
+  return <LoginPage />
+}
+
 function App() {
   const { token } = useAuthStore()
   const { loadConfig } = useBrandStore()
@@ -66,7 +76,7 @@ function App() {
         <ConfirmProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={<LoginRoute />} />
 
               <Route
                 path="/"
