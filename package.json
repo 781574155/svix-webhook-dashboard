@@ -38,7 +38,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "docker:build": "cross-var docker build --platform=linux/amd64,linux/arm64 -t tanqi/$npm_package_name:v$npm_package_version .",
+    "docker:build": "cross-var docker build --platform=linux/amd64 -t tanqi/$npm_package_name:v$npm_package_version .",
     "docker:tag": "cross-var docker tag tanqi/$npm_package_name:v$npm_package_version registry.openai36.com/tanqi/$npm_package_name:v$npm_package_version ",
     "docker:push": "cross-var docker push registry.openai36.com/tanqi/$npm_package_name:v$npm_package_version ",
     "package": "npm run build && npm run docker:build && npm run docker:tag && npm run docker:push"

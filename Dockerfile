@@ -10,3 +10,4 @@ COPY --from=build /app/dist /work/html
 
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./nginx/mime.types /etc/nginx/mime.types
+COPY ./nginx/.htpasswd /etc/nginx/.htpasswd
